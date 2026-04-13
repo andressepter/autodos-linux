@@ -1,4 +1,5 @@
 /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/autodos-cli.dir
+/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/autodos-tui.dir
 /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/edit_cache.dir
 /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/rebuild_cache.dir
 /home/asepter/Cursor/zyxel/autoDos/build/_deps/nlohmann_json-build/CMakeFiles/edit_cache.dir

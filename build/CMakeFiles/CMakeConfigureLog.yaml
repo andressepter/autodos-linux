@@ -1758,3 +1758,632 @@ events:
         - "/usr/pkg"
         - "/opt"
 ...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindCurses.cmake:137 (find_library)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "library"
+    variable: "CURSES_CURSES_LIBRARY"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "curses"
+    candidate_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib/"
+      - "/usr/X11R6/lib/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/lib/"
+      - "/usr/pkg/"
+      - "/opt/lib/"
+      - "/opt/"
+      - "/usr/lib/X11/"
+    searched_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+    found: "/usr/lib/libcurses.so"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindCurses.cmake:139 (find_library)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "library"
+    variable: "CURSES_NCURSES_LIBRARY"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ncurses"
+    candidate_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib/"
+      - "/usr/X11R6/lib/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/lib/"
+      - "/usr/pkg/"
+      - "/opt/lib/"
+      - "/opt/"
+      - "/usr/lib/X11/"
+    searched_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+    found: "/usr/lib/libncurses.so"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/FindCurses.cmake:177 (check_library_exists)"
+      - "CMakeLists.txt:38 (find_package)"
+    directories:
+      source: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th"
+      binary: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CURSES_CURSES_HAS_WSYNCUP"
+      cached: true
+      stdout: |
+        Change Dir: '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_547d0/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_547d0.dir/build.make CMakeFiles/cmTC_547d0.dir/build
+        make[1]: Entering directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th'
+        Building C object CMakeFiles/cmTC_547d0.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=wsyncup -o CMakeFiles/cmTC_547d0.dir/CheckFunctionExists.c.o -c /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th/CheckFunctionExists.c
+        Linking C executable cmTC_547d0
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_547d0.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=wsyncup CMakeFiles/cmTC_547d0.dir/CheckFunctionExists.c.o -o cmTC_547d0  -lcurses
+        make[1]: Leaving directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-quy9Th'
+        
+      exitCode: 0
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindCurses.cmake:220 (find_path)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "path"
+    variable: "CURSES_INCLUDE_PATH"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ncurses/ncurses.h"
+      - "ncurses/curses.h"
+      - "ncurses.h"
+      - "curses.h"
+    candidate_directories:
+      - "/usr/include/"
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/include/"
+      - "/usr/local/"
+      - "/usr/include/"
+      - "/usr/"
+      - "/include/"
+      - "/usr/X11R6/include/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/include/"
+      - "/usr/pkg/"
+      - "/opt/include/"
+      - "/opt/"
+      - "/usr/include/X11/"
+    searched_directories:
+      - "/usr/include/ncurses/ncurses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/ncurses/ncurses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/ncurses/ncurses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/ncurses/ncurses.h"
+      - "/tmp/.mount_CursorLi2AY4/bin/ncurses/ncurses.h"
+      - "/tmp/.mount_CursorLi2AY4/sbin/ncurses/ncurses.h"
+      - "/usr/local/sbin/ncurses/ncurses.h"
+      - "/usr/local/bin/ncurses/ncurses.h"
+      - "/usr/bin/ncurses/ncurses.h"
+      - "/usr/bin/site_perl/ncurses/ncurses.h"
+      - "/usr/bin/vendor_perl/ncurses/ncurses.h"
+      - "/usr/bin/core_perl/ncurses/ncurses.h"
+      - "/usr/local/include/ncurses/ncurses.h"
+      - "/usr/local/ncurses/ncurses.h"
+      - "/usr/include/ncurses/ncurses.h"
+      - "/usr/ncurses/ncurses.h"
+      - "/include/ncurses/ncurses.h"
+      - "/usr/X11R6/include/ncurses/ncurses.h"
+      - "/usr/X11R6/ncurses/ncurses.h"
+      - "/usr/pkg/include/ncurses/ncurses.h"
+      - "/usr/pkg/ncurses/ncurses.h"
+      - "/opt/include/ncurses/ncurses.h"
+      - "/opt/ncurses/ncurses.h"
+      - "/usr/include/X11/ncurses/ncurses.h"
+      - "/usr/include/ncurses/curses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/ncurses/curses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/ncurses/curses.h"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/ncurses/curses.h"
+      - "/tmp/.mount_CursorLi2AY4/bin/ncurses/curses.h"
+      - "/tmp/.mount_CursorLi2AY4/sbin/ncurses/curses.h"
+      - "/usr/local/sbin/ncurses/curses.h"
+      - "/usr/local/bin/ncurses/curses.h"
+      - "/usr/bin/ncurses/curses.h"
+      - "/usr/bin/site_perl/ncurses/curses.h"
+      - "/usr/bin/vendor_perl/ncurses/curses.h"
+      - "/usr/bin/core_perl/ncurses/curses.h"
+      - "/usr/local/include/ncurses/curses.h"
+      - "/usr/local/ncurses/curses.h"
+      - "/usr/include/ncurses/curses.h"
+      - "/usr/ncurses/curses.h"
+      - "/include/ncurses/curses.h"
+      - "/usr/X11R6/include/ncurses/curses.h"
+      - "/usr/X11R6/ncurses/curses.h"
+      - "/usr/pkg/include/ncurses/curses.h"
+      - "/usr/pkg/ncurses/curses.h"
+      - "/opt/include/ncurses/curses.h"
+      - "/opt/ncurses/curses.h"
+      - "/usr/include/X11/ncurses/curses.h"
+    found: "/usr/include/"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/FindCurses.cmake:231 (check_library_exists)"
+      - "CMakeLists.txt:38 (find_package)"
+    checks:
+      - "Looking for cbreak in /usr/lib/libncurses.so"
+    directories:
+      source: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG"
+      binary: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CURSES_NCURSES_HAS_CBREAK"
+      cached: true
+      stdout: |
+        Change Dir: '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c8d17/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_c8d17.dir/build.make CMakeFiles/cmTC_c8d17.dir/build
+        make[1]: Entering directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG'
+        Building C object CMakeFiles/cmTC_c8d17.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cbreak -o CMakeFiles/cmTC_c8d17.dir/CheckFunctionExists.c.o -c /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG/CheckFunctionExists.c
+        Linking C executable cmTC_c8d17
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c8d17.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=cbreak CMakeFiles/cmTC_c8d17.dir/CheckFunctionExists.c.o -o cmTC_c8d17  -lncurses
+        make[1]: Leaving directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-0DledG'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/FindCurses.cmake:233 (check_library_exists)"
+      - "CMakeLists.txt:38 (find_package)"
+    checks:
+      - "Looking for nodelay in /usr/lib/libncurses.so"
+    directories:
+      source: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c"
+      binary: "/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CURSES_NCURSES_HAS_NODELAY"
+      cached: true
+      stdout: |
+        Change Dir: '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_96690/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_96690.dir/build.make CMakeFiles/cmTC_96690.dir/build
+        make[1]: Entering directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c'
+        Building C object CMakeFiles/cmTC_96690.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=nodelay -o CMakeFiles/cmTC_96690.dir/CheckFunctionExists.c.o -c /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c/CheckFunctionExists.c
+        Linking C executable cmTC_96690
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_96690.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=nodelay CMakeFiles/cmTC_96690.dir/CheckFunctionExists.c.o -o cmTC_96690  -lncurses
+        make[1]: Leaving directory '/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles/CMakeScratch/TryCompile-wCFM2c'
+        
+      exitCode: 0
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindCurses.cmake:308 (find_library)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "library"
+    variable: "CURSES_FORM_LIBRARY"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "form"
+    candidate_directories:
+      - "/usr/lib/"
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib/"
+      - "/usr/X11R6/lib/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/lib/"
+      - "/usr/pkg/"
+      - "/opt/lib/"
+      - "/opt/"
+      - "/usr/lib/X11/"
+    found: "/usr/lib/libform.so"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindPkgConfig.cmake:517 (find_program)"
+      - "/usr/share/cmake/Modules/FindCurses.cmake:331 (find_package)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "program"
+    variable: "PKG_CONFIG_EXECUTABLE"
+    description: "pkg-config executable"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "pkg-config"
+      - "pkgconf"
+    candidate_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    searched_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/pkg-config"
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/pkgconf"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/pkg-config"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/pkgconf"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/pkg-config"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/pkgconf"
+      - "/tmp/.mount_CursorLi2AY4/bin/pkg-config"
+      - "/tmp/.mount_CursorLi2AY4/bin/pkgconf"
+      - "/tmp/.mount_CursorLi2AY4/sbin/pkg-config"
+      - "/tmp/.mount_CursorLi2AY4/sbin/pkgconf"
+      - "/usr/local/sbin/pkg-config"
+      - "/usr/local/sbin/pkgconf"
+      - "/usr/local/bin/pkg-config"
+      - "/usr/local/bin/pkgconf"
+    found: "/usr/bin/pkg-config"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/FindPkgConfig.cmake:765 (find_library)"
+      - "/usr/share/cmake/Modules/FindPkgConfig.cmake:811 (_pkg_find_libs)"
+      - "/usr/share/cmake/Modules/FindPkgConfig.cmake:1149 (_pkg_recalculate)"
+      - "/usr/share/cmake/Modules/FindPkgConfig.cmake:1166 (_pkg_check_modules_internal)"
+      - "/usr/share/cmake/Modules/FindCurses.cmake:333 (pkg_check_modules)"
+      - "CMakeLists.txt:38 (find_package)"
+    mode: "library"
+    variable: "pkgcfg_lib_NCURSES_ncursesw"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ncursesw"
+    candidate_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib/"
+      - "/usr/X11R6/lib/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/lib/"
+      - "/usr/pkg/"
+      - "/opt/lib/"
+      - "/opt/"
+      - "/usr/lib/X11/"
+    searched_directories:
+      - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+      - "/tmp/.mount_CursorLi2AY4/usr/games/"
+      - "/tmp/.mount_CursorLi2AY4/bin/"
+      - "/tmp/.mount_CursorLi2AY4/sbin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+    found: "/usr/lib/libncursesw.so"
+    search_context:
+      ENV{PATH}:
+        - "/tmp/.mount_CursorLi2AY4/usr/bin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/sbin/"
+        - "/tmp/.mount_CursorLi2AY4/usr/games/"
+        - "/tmp/.mount_CursorLi2AY4/bin/"
+        - "/tmp/.mount_CursorLi2AY4/sbin/"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+...

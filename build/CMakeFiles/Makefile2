@@ -64,11 +64,13 @@ CMAKE_BINARY_DIR = /home/asepter/Cursor/zyxel/autoDos/build
 
 # The main recursive "all" target.
 all: CMakeFiles/autodos-cli.dir/all
+all: CMakeFiles/autodos-tui.dir/all
 all: _deps/nlohmann_json-build/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/autodos-cli.dir/codegen
+codegen: CMakeFiles/autodos-tui.dir/codegen
 codegen: _deps/nlohmann_json-build/codegen
 .PHONY : codegen
 
@@ -78,6 +80,7 @@ preinstall: _deps/nlohmann_json-build/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/autodos-cli.dir/clean
+clean: CMakeFiles/autodos-tui.dir/clean
 clean: _deps/nlohmann_json-build/clean
 .PHONY : clean
 
@@ -131,6 +134,38 @@ CMakeFiles/autodos-cli.dir/codegen:
 CMakeFiles/autodos-cli.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/clean
 .PHONY : CMakeFiles/autodos-cli.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/autodos-tui.dir
+
+# All Build rule for target.
+CMakeFiles/autodos-tui.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles --progress-num=5,6,7,8 "Built target autodos-tui"
+.PHONY : CMakeFiles/autodos-tui.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/autodos-tui.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/autodos-tui.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles 0
+.PHONY : CMakeFiles/autodos-tui.dir/rule
+
+# Convenience name for target.
+autodos-tui: CMakeFiles/autodos-tui.dir/rule
+.PHONY : autodos-tui
+
+# codegen rule for target.
+CMakeFiles/autodos-tui.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/asepter/Cursor/zyxel/autoDos/build/CMakeFiles --progress-num=5,6,7,8 "Finished codegen for target autodos-tui"
+.PHONY : CMakeFiles/autodos-tui.dir/codegen
+
+# clean rule for target.
+CMakeFiles/autodos-tui.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/clean
+.PHONY : CMakeFiles/autodos-tui.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

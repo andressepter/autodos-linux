@@ -129,12 +129,26 @@ autodos-cli/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/build
 .PHONY : autodos-cli/fast
 
+#=============================================================================
+# Target rules for targets named autodos-tui
+
+# Build rule for target.
+autodos-tui: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 autodos-tui
+.PHONY : autodos-tui
+
+# fast build rule for target.
+autodos-tui/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/build
+.PHONY : autodos-tui/fast
+
 src/autodos.o: src/autodos.cpp.o
 .PHONY : src/autodos.o
 
 # target to build an object file
 src/autodos.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/autodos.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/autodos.cpp.o
 .PHONY : src/autodos.cpp.o
 
 src/autodos.i: src/autodos.cpp.i
@@ -143,6 +157,7 @@ src/autodos.i: src/autodos.cpp.i
 # target to preprocess a source file
 src/autodos.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/autodos.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/autodos.cpp.i
 .PHONY : src/autodos.cpp.i
 
 src/autodos.s: src/autodos.cpp.s
@@ -151,6 +166,7 @@ src/autodos.s: src/autodos.cpp.s
 # target to generate assembly for a file
 src/autodos.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/autodos.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/autodos.cpp.s
 .PHONY : src/autodos.cpp.s
 
 src/launch_posix.o: src/launch_posix.cpp.o
@@ -159,6 +175,7 @@ src/launch_posix.o: src/launch_posix.cpp.o
 # target to build an object file
 src/launch_posix.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/launch_posix.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/launch_posix.cpp.o
 .PHONY : src/launch_posix.cpp.o
 
 src/launch_posix.i: src/launch_posix.cpp.i
@@ -167,6 +184,7 @@ src/launch_posix.i: src/launch_posix.cpp.i
 # target to preprocess a source file
 src/launch_posix.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/launch_posix.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/launch_posix.cpp.i
 .PHONY : src/launch_posix.cpp.i
 
 src/launch_posix.s: src/launch_posix.cpp.s
@@ -175,6 +193,7 @@ src/launch_posix.s: src/launch_posix.cpp.s
 # target to generate assembly for a file
 src/launch_posix.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/launch_posix.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/launch_posix.cpp.s
 .PHONY : src/launch_posix.cpp.s
 
 src/main_cli.o: src/main_cli.cpp.o
@@ -201,6 +220,30 @@ src/main_cli.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-cli.dir/build.make CMakeFiles/autodos-cli.dir/src/main_cli.cpp.s
 .PHONY : src/main_cli.cpp.s
 
+src/main_tui.o: src/main_tui.cpp.o
+.PHONY : src/main_tui.o
+
+# target to build an object file
+src/main_tui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/main_tui.cpp.o
+.PHONY : src/main_tui.cpp.o
+
+src/main_tui.i: src/main_tui.cpp.i
+.PHONY : src/main_tui.i
+
+# target to preprocess a source file
+src/main_tui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/main_tui.cpp.i
+.PHONY : src/main_tui.cpp.i
+
+src/main_tui.s: src/main_tui.cpp.s
+.PHONY : src/main_tui.s
+
+# target to generate assembly for a file
+src/main_tui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/autodos-tui.dir/build.make CMakeFiles/autodos-tui.dir/src/main_tui.cpp.s
+.PHONY : src/main_tui.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -210,6 +253,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... autodos-cli"
+	@echo "... autodos-tui"
 	@echo "... src/autodos.o"
 	@echo "... src/autodos.i"
 	@echo "... src/autodos.s"
@@ -219,6 +263,9 @@ help:
 	@echo "... src/main_cli.o"
 	@echo "... src/main_cli.i"
 	@echo "... src/main_cli.s"
+	@echo "... src/main_tui.o"
+	@echo "... src/main_tui.i"
+	@echo "... src/main_tui.s"
 .PHONY : help
 
 
