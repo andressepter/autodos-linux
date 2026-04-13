@@ -1,5 +1,7 @@
 # games.json sync, local overlay, and upstream merge requests
 
+See also **[UPSTREAM_LEGACY.md](UPSTREAM_LEGACY.md)** for removed Windows/upstream-only context.
+
 ## Two files
 
 1. **Primary** (`src/games.json` or `AUTODOS_DB`) — track the upstream database. Refresh with `scripts/sync-games-json.sh` (replace) or `--merge` (upstream wins on key clashes; keys only in your old file are kept).

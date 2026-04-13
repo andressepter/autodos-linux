@@ -517,8 +517,6 @@ static std::vector<fs::path> profileSearchPathsOrdered(const std::string& name) 
         c.push_back(fs::path(xdg) / "autodos" / "bases" / (name + ".conf"));
     if (const char* home = std::getenv("HOME"))
         c.push_back(fs::path(home) / ".config" / "autodos" / "bases" / (name + ".conf"));
-    if (const char* ad = std::getenv("APPDATA"))
-        c.push_back(fs::path(ad) / "AutoDOS" / "bases" / (name + ".conf"));
     return c;
 }
 

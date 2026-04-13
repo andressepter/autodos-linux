@@ -57,7 +57,7 @@ bool extractZip(const std::string& zipPath, const std::string& outDir);
 // Resolution when baseConfPath and baseProfileName are both empty:
 //   1) AUTODOS_BASE_CONF — path to a .conf file
 //   2) Profile name from AUTODOS_BASE_PROFILE, else "default"
-//   3) Search config/bases/<name>.conf, then XDG_CONFIG_HOME ~/.config, APPDATA\AutoDOS
+//   3) Search config/bases/<name>.conf, then XDG_CONFIG_HOME and ~/.config/autodos/bases/
 //   4) Embedded fallback matching legacy AutoDOS globals
 //
 // If confOutputPath is empty, writes next to the zip: <zip_stem>.conf

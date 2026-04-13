@@ -1,4 +1,4 @@
-// autodos-cli — headless AutoDOS engine (Linux / macOS / Windows console).
+// autodos-cli — headless AutoDOS engine (Linux; POSIX launcher also works on macOS).
 
 #include "autodos.h"
 #include "autodos_launch.h"

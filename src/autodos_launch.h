@@ -1,5 +1,5 @@
 #pragma once
-// Platform-specific process spawning (Win32 / POSIX). UI and CLI link this.
+// Spawn DOSBox detached (fork + setsid + execlp). See docs/UPSTREAM_LEGACY.md for removed Win32 code.
 
 #include <string>
 
