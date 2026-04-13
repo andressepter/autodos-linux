@@ -7,12 +7,13 @@
 
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
 #include <fstream>
 #include <regex>
 #include <sstream>
-#include <windows.h>
 
 using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 namespace AutoDOS {
 
@@ -55,10 +56,7 @@ static std::string dirOf(const std::string& path) {
     std::string normalized = path;
     std::replace(normalized.begin(), normalized.end(), '\\', '/');
     size_t pos = normalized.rfind('/');
-    if (pos == std::string::npos) return "";
-    std::string dir = normalized.substr(0, pos);
-    std::replace(dir.begin(), dir.end(), '/', '\\');
-    return dir;
+    return (pos == std::string::npos) ? "" : normalized.substr(0, pos);
 }
 
 static bool endsWith(const std::string& s, const std::string& suffix) {
@@ -284,30 +282,31 @@ static json loadDatabase(const std::string& dbPath) {
 // ── Find ISO in extracted dir ─────────────────────────────────────────────────
 
 static std::string findIsoInDir(const std::string& dir) {
-    WIN32_FIND_DATAA fd = {};
-    std::string pattern = dir + "\\*";
-    HANDLE h = FindFirstFileA(pattern.c_str(), &fd);
-    if (h == INVALID_HANDLE_VALUE) return "";
-
-    std::string found;
-    do {
-        std::string name = fd.cFileName;
-        if (name == "." || name == "..") continue;
-        std::string fullPath = dir + "\\" + name;
-        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            found = findIsoInDir(fullPath);
-            if (!found.empty()) break;
-        } else {
-            std::string ext = toUpper(extOf(name));
-            if (ext == "ISO" || ext == "CUE" || ext == "BIN" || ext == "MDF") {
-                found = fullPath;
-                break;
-            }
+    try {
+        const fs::path root(dir);
+        if (!fs::exists(root) || !fs::is_directory(root))
+            return "";
+        for (const auto& entry : fs::recursive_directory_iterator(
+                 root, fs::directory_options::skip_permission_denied)) {
+            if (!entry.is_regular_file())
+                continue;
+            std::string ext = toUpper(entry.path().extension().string());
+            if (ext.size() > 0 && ext[0] == '.')
+                ext = ext.substr(1);
+            if (ext == "ISO" || ext == "CUE" || ext == "BIN" || ext == "MDF")
+                return entry.path().string();
         }
-    } while (FindNextFileA(h, &fd));
+    } catch (...) {
+    }
+    return {};
+}
 
-    FindClose(h);
-    return found;
+static bool zipPathHasParentReference(const fs::path& rel) {
+    for (const auto& part : rel) {
+        if (part == "..")
+            return true;
+    }
+    return false;
 }
 
 // ── Main analyze function ─────────────────────────────────────────────────────
@@ -437,6 +436,7 @@ bool extractZip(const std::string& zipPath, const std::string& outDir) {
     if (!mz_zip_reader_init_file(&zip, zipPath.c_str(), 0)) return false;
 
     int count = (int)mz_zip_reader_get_num_files(&zip);
+    const fs::path root(outDir);
 
     for (int i = 0; i < count; i++) {
         if (mz_zip_reader_is_file_a_directory(&zip, i)) continue;
@@ -445,49 +445,47 @@ bool extractZip(const std::string& zipPath, const std::string& outDir) {
         if (!mz_zip_reader_file_stat(&zip, i, &stat)) continue;
 
         std::string name = stat.m_filename;
-
-        // Normalize to backslash
-        std::replace(name.begin(), name.end(), '/', '\\');
-
-        // Skip dangerous paths
-        if (name.find("..\\") != std::string::npos) continue;
-        if (name.size() > 1 && name[1] == ':') continue;
+        std::replace(name.begin(), name.end(), '\\', '/');
         if (name.empty()) continue;
+        if (name.size() > 1 && name[1] == ':') continue;
 
-        std::string outPath = outDir + "\\" + name;
+        fs::path rel = fs::path(name).lexically_normal();
+        if (zipPathHasParentReference(rel)) continue;
+        if (rel.is_absolute()) continue;
 
-        // Create all parent directories using Windows API
-        std::string dir = outPath.substr(0, outPath.rfind('\\'));
-        // Walk up and create each level
-        for (size_t pos = outDir.size(); pos < dir.size(); ) {
-            pos = dir.find('\\', pos + 1);
-            if (pos == std::string::npos) pos = dir.size();
-            CreateDirectoryA(dir.substr(0, pos).c_str(), nullptr);
-        }
+        fs::path outPath = root / rel;
+        std::error_code ec;
+        fs::create_directories(outPath.parent_path(), ec);
 
-        // Extract file — skip on failure, don't abort whole zip
         try {
-            mz_zip_reader_extract_to_file(&zip, i, outPath.c_str(), 0);
+            mz_zip_reader_extract_to_file(&zip, i, outPath.string().c_str(), 0);
         } catch (...) {
-            // Skip this file
         }
     }
 
     mz_zip_reader_end(&zip);
-    return true;  // always return true — partial extract is better than failure
+    return true;
 }
 
 // ── Write DOSBox conf ─────────────────────────────────────────────────────────
 
+static std::string toDosCdPath(std::string s) {
+    std::replace(s.begin(), s.end(), '/', '\\');
+    return s;
+}
+
 bool writeDosboxConf(const std::string& zipPath,
                      const std::string& extractedDir,
-                     const AnalyzeResult& result) {
-    std::string confPath = zipPath.substr(0, zipPath.rfind('.')) + ".conf";
+                     const AnalyzeResult& result,
+                     const std::string& confOutputPath) {
+    std::string confPath = confOutputPath.empty()
+        ? zipPath.substr(0, zipPath.rfind('.')) + ".conf"
+        : confOutputPath;
 
-    // Parse exe path
+    // Parse exe path (zip-internal; use '/' then convert for DOS cd line)
     std::string exeFull = result.exe;
-    std::replace(exeFull.begin(), exeFull.end(), '/', '\\');
-    size_t lastSlash = exeFull.rfind('\\');
+    std::replace(exeFull.begin(), exeFull.end(), '\\', '/');
+    size_t lastSlash = exeFull.rfind('/');
     std::string exeName = (lastSlash != std::string::npos)
         ? exeFull.substr(lastSlash + 1)
         : exeFull;
@@ -495,28 +493,32 @@ bool writeDosboxConf(const std::string& zipPath,
         ? exeFull.substr(0, lastSlash)
         : "";
 
-    // Use work_dir from database if set, otherwise derive from path
     std::string cdDir = result.workDir.empty() ? exeSubDir : result.workDir;
+    std::string cdDos = toDosCdPath(cdDir);
 
     std::string cycles  = result.cycles.empty() ? "max limit 80000" : result.cycles;
     int         memsize = result.memsize > 0 ? result.memsize : 16;
 
-    // Build autoexec
+    std::string mountHost = fs::path(extractedDir).make_preferred().string();
+
     std::ostringstream autoexec;
     autoexec << "@echo off\r\n";
-    autoexec << "mount C \"" << extractedDir << "\"\r\n";
+    autoexec << "mount C \"" << mountHost << "\"\r\n";
 
-    // CD mount for CD-based games
     if (result.cdMount) {
         std::string isoPath = findIsoInDir(extractedDir);
         if (!isoPath.empty()) {
-            autoexec << "imgmount D \"" << isoPath << "\" -t iso\r\n";
+            std::string isoHost = fs::path(isoPath).make_preferred().string();
+            autoexec << "imgmount D \"" << isoHost << "\" -t iso\r\n";
         }
     }
 
     autoexec << "C:\r\n";
-    if (!cdDir.empty()) {
-        autoexec << "cd \\" << cdDir << "\r\n";
+    if (!cdDos.empty()) {
+        if (cdDos[0] == '\\')
+            autoexec << "cd " << cdDos << "\r\n";
+        else
+            autoexec << "cd \\" << cdDos << "\r\n";
     }
     autoexec << exeName << "\r\n";
     autoexec << "exit\r\n";
@@ -560,28 +562,6 @@ bool writeDosboxConf(const std::string& zipPath,
     if (!f.is_open()) return false;
     f << conf.str();
     return true;
-}
-
-// ── Launch DOSBox ─────────────────────────────────────────────────────────────
-
-bool launchDosBox(const std::string& dosboxPath, const std::string& confPath) {
-    std::string cmd = "\"" + dosboxPath + "\" -conf \"" + confPath + "\"";
-    STARTUPINFOA        si = { sizeof(si) };
-    PROCESS_INFORMATION pi = {};
-    bool ok = CreateProcessA(
-        nullptr,
-        const_cast<char*>(cmd.c_str()),
-        nullptr, nullptr, FALSE,
-        DETACHED_PROCESS,
-        nullptr,
-        nullptr,
-        &si, &pi
-    );
-    if (ok) {
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-    }
-    return ok;
 }
 
 // ── Add to database ───────────────────────────────────────────────────────────

@@ -18,6 +18,7 @@
 #include <atomic>
 
 #include "autodos.h"
+#include "autodos_launch.h"
 #include "nlohmann/json.hpp"
 
 #pragma comment(lib, "comctl32.lib")

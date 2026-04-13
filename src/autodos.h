@@ -47,13 +47,12 @@ AnalyzeResult analyze(const std::string& zipPath, const std::string& dbPath);
 // Extract zip to outDir
 bool extractZip(const std::string& zipPath, const std::string& outDir);
 
-// Write a dosbox.conf using the analyze result
+// Write a dosbox.conf using the analyze result.
+// If confOutputPath is empty, writes next to the zip: <zip_stem>.conf
 bool writeDosboxConf(const std::string& zipPath,
                      const std::string& extractedDir,
-                     const AnalyzeResult& result);
-
-// Launch DOSBox with the conf
-bool launchDosBox(const std::string& dosboxPath, const std::string& confPath);
+                     const AnalyzeResult& result,
+                     const std::string& confOutputPath = "");
 
 // Fingerprint a filename for database lookup
 std::string fingerprint(const std::string& filename);
