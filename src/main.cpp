@@ -1,6 +1,7 @@
 // main.cpp — AutoDOS GUI (Win32)
 // Drop any DOS zip → AutoDOS finds the exe → DOSBox launches
 
+#include <cstdlib>
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -76,6 +77,7 @@ static HWND g_btnAdd    = nullptr;
 
 static std::string g_appDir;
 static std::string g_dbPath;
+static std::string g_localDbPath; // AUTODOS_DB_LOCAL — overlay; autosync writes here if set
 static std::string g_libPath;
 static std::string g_dosboxPath;
 
@@ -172,7 +174,7 @@ static void workerThread(std::string zipPath) {
     postStatus("Analyzing: " + fs::path(zipPath).filename().string() + "...");
 
     auto* res = new ImportResult();
-    res->analyzeResult = AutoDOS::analyze(zipPath, g_dbPath);
+    res->analyzeResult = AutoDOS::analyze(zipPath, g_dbPath, g_localDbPath);
 
     if (!res->analyzeResult.success) {
         res->ok    = false;
@@ -389,7 +391,9 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
                 if (res->analyzeResult.source == "scored") {
                     res->analyzeResult.title = res->entry.title;
-                    AutoDOS::addToDatabase(g_dbPath, res->analyzeResult);
+                    const std::string& dbWrite =
+                        g_localDbPath.empty() ? g_dbPath : g_localDbPath;
+                    AutoDOS::addToDatabase(dbWrite, res->analyzeResult);
                 }
 
                 refreshList();
@@ -479,6 +483,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow) {
 
     g_appDir     = appDataDir();
     g_dbPath     = g_appDir + "\\games.json";
+    if (const char* ld = std::getenv("AUTODOS_DB_LOCAL"))
+        g_localDbPath = ld;
     g_libPath    = g_appDir + "\\library.json";
     g_dosboxPath = exeDir()  + "\\dosbox\\dosbox.exe";
 

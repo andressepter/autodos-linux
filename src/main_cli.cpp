@@ -5,9 +5,9 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include <filesystem>
 #include <iostream>
-#include <string>
 #include <vector>
 
 namespace fs = std::filesystem;
@@ -16,12 +16,12 @@ static void printUsage() {
     std::cerr
         << "autodos-cli — AutoDOS engine (no GUI)\n\n"
         << "Usage:\n"
-        << "  autodos-cli analyze <zip> [--db PATH]\n"
-        << "      Print a short analysis summary (exit 0 if an executable was chosen).\n\n"
+        << "  autodos-cli analyze <zip> [--db PATH] [--local-db PATH]\n"
+        << "      Print analysis (merged DB: primary + optional local overlay).\n\n"
         << "  autodos-cli extract <zip> <outdir>\n"
         << "      Extract zip to outdir.\n\n"
         << "  autodos-cli prepare <zip> [--db PATH] [--dir OUTDIR] [--conf PATH]\n"
-        << "              [--base PATH] [--profile NAME]\n"
+        << "              [--base PATH] [--profile NAME] [--local-db PATH]\n"
         << "      Analyze, extract, write dosbox.conf. Base profile = global DOSBox settings;\n"
         << "      per-game cycles/mem/EMS/autoexec are appended (override same keys).\n\n"
         << "  autodos-cli bases [NAME]\n"
@@ -30,6 +30,7 @@ static void printUsage() {
         << "      Start DOSBox with -conf (default PATH: dosbox, or AUTODOS_DOSBOX env).\n\n"
         << "Environment:\n"
         << "  AUTODOS_DB             Default games.json for --db\n"
+        << "  AUTODOS_DB_LOCAL       Default overlay path for --local-db\n"
         << "  AUTODOS_BASE_CONF      Full path to a base .conf (overrides profile search)\n"
         << "  AUTODOS_BASE_PROFILE   Profile name (config/bases/<name>.conf)\n";
 }
@@ -39,6 +40,11 @@ static std::string defaultDbPath() {
     if (e && e[0])
         return e;
     return "games.json";
+}
+
+static std::string defaultLocalDbPath() {
+    const char* e = std::getenv("AUTODOS_DB_LOCAL");
+    return (e && e[0]) ? std::string(e) : std::string();
 }
 
 static int cmdAnalyze(int argc, char** argv) {
