@@ -33,6 +33,25 @@ add_executable(autodos-cli
 target_include_directories(autodos-cli PRIVATE src)
 target_link_libraries(autodos-cli PRIVATE nlohmann_json::nlohmann_json)
 
+# ── TUI (ncurses): optional ───────────────────────────────────────────────────
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses QUIET)
+if(CURSES_FOUND)
+    add_executable(autodos-tui
+        src/main_tui.cpp
+        ${ENGINE_SOURCES}
+        ${LAUNCH_SOURCES}
+    )
+    target_include_directories(autodos-tui PRIVATE src ${CURSES_INCLUDE_DIR})
+    target_link_libraries(autodos-tui PRIVATE
+        nlohmann_json::nlohmann_json
+        ${CURSES_LIBRARIES}
+    )
+    target_compile_definitions(autodos-tui PRIVATE _DEFAULT_SOURCE)
+else()
+    message(STATUS "Curses/ncurses not found — autodos-tui target skipped")
+endif()
+
 # ── Windows GUI ───────────────────────────────────────────────────────────────
 if(WIN32)
     add_executable(AutoDOS WIN32

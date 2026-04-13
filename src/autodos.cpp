@@ -269,7 +269,7 @@ static float scoreExe(const ZipEntry& e, const std::string& zipBase, size_t maxC
 
 // ── Database loader ───────────────────────────────────────────────────────────
 
-static json loadDatabase(const std::string& dbPath) {
+static json loadGamesFromFile(const std::string& dbPath) {
     std::ifstream f(dbPath);
     if (!f.is_open()) return json::object();
     json data;
@@ -279,6 +279,16 @@ static json loadDatabase(const std::string& dbPath) {
     } catch (...) {
         return json::object();
     }
+}
+
+static json mergeGamesFromFiles(const std::string& primaryPath, const std::string& localPath) {
+    json merged = loadGamesFromFile(primaryPath);
+    if (localPath.empty())
+        return merged;
+    json loc = loadGamesFromFile(localPath);
+    for (auto it = loc.begin(); it != loc.end(); ++it)
+        merged[it.key()] = it.value();
+    return merged;
 }
 
 // ── Find ISO in extracted dir ─────────────────────────────────────────────────
@@ -313,7 +323,9 @@ static bool zipPathHasParentReference(const fs::path& rel) {
 
 // ── Main analyze function ─────────────────────────────────────────────────────
 
-AnalyzeResult analyze(const std::string& zipPath, const std::string& dbPath) {
+AnalyzeResult analyze(const std::string& zipPath,
+                      const std::string& dbPath,
+                      const std::string& localDbPath) {
     AnalyzeResult result;
 
     // Read zip entries
@@ -329,7 +341,7 @@ AnalyzeResult analyze(const std::string& zipPath, const std::string& dbPath) {
     result.gameType  = gt;
 
     // ── Layer 1: Database lookup ──────────────────────────────────────────────
-    json db = loadDatabase(dbPath);
+    json db = mergeGamesFromFiles(dbPath, localDbPath);
 
     json dbEntry;
     if (db.contains(fp)) {
@@ -658,13 +670,21 @@ bool writeDosboxConf(const std::string& zipPath,
 // ── Add to database ───────────────────────────────────────────────────────────
 
 bool addToDatabase(const std::string& dbPath, const AnalyzeResult& result) {
-    // Load existing
+    try {
+        fs::path p(dbPath);
+        if (p.has_parent_path())
+            fs::create_directories(p.parent_path());
+    } catch (...) {
+    }
+
     json data;
     std::ifstream fin(dbPath);
     if (fin.is_open()) {
         try { fin >> data; } catch (...) {}
         fin.close();
     }
+    if (!data.contains("games") || !data["games"].is_object())
+        data["games"] = json::object();
 
     std::string key = fingerprint(result.title.empty() ? result.exe : result.title);
     if (key.empty()) return false;
