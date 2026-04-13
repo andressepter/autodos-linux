@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/autodos-cli.dir/link.d "CMakeFiles/autodos-cli.dir/src/main_cli.cpp.o" "CMakeFiles/autodos-cli.dir/src/autodos.cpp.o" "CMakeFiles/autodos-cli.dir/src/launch_posix.cpp.o" -o bin/autodos-cli
