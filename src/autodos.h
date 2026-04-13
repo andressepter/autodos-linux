@@ -41,8 +41,11 @@ struct GameEntry {
 
 // ── Core API ──────────────────────────────────────────────────────────────────
 
-// Analyze a zip file and return launch configuration
-AnalyzeResult analyze(const std::string& zipPath, const std::string& dbPath);
+// Analyze a zip file. Merges game entries: primary dbPath + optional localDbPath
+// (same schema as games.json). On duplicate keys, local overlay wins.
+AnalyzeResult analyze(const std::string& zipPath,
+                      const std::string& dbPath,
+                      const std::string& localDbPath = "");
 
 // Extract zip to outDir
 bool extractZip(const std::string& zipPath, const std::string& outDir);
@@ -71,7 +74,8 @@ std::vector<std::string> baseProfileCandidates(const std::string& profileName);
 // Fingerprint a filename for database lookup
 std::string fingerprint(const std::string& filename);
 
-// Add a game to games.json
+// Add a game entry to the given JSON file (creates parent dirs / minimal file if needed).
+// Point dbPath at games.local.json to keep autosync off the upstream-synced copy.
 bool addToDatabase(const std::string& dbPath, const AnalyzeResult& result);
 
 } // namespace AutoDOS

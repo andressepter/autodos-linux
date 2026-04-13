@@ -1,0 +1,7 @@
+{
+  "_meta": {
+    "description": "Rename to games.local.json — entries here override the same keys in your primary games.json",
+    "version": "1"
+  },
+  "games": {}
+}
