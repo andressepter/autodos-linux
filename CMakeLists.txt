@@ -15,10 +15,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nlohmann_json)
 
-set(ENGINE_SOURCES
-    src/autodos.cpp
-    src/miniz.c
-)
+# autodos.cpp #includes miniz.c (single translation unit); do not compile miniz.c again.
+set(ENGINE_SOURCES src/autodos.cpp)
 
 if(WIN32)
     set(LAUNCH_SOURCES src/launch_win32.cpp)
