@@ -7,10 +7,12 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <regex>
 #include <sstream>
+#include <vector>
 
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -474,24 +476,108 @@ static std::string toDosCdPath(std::string s) {
     return s;
 }
 
-bool writeDosboxConf(const std::string& zipPath,
-                     const std::string& extractedDir,
-                     const AnalyzeResult& result,
-                     const std::string& confOutputPath) {
-    std::string confPath = confOutputPath.empty()
-        ? zipPath.substr(0, zipPath.rfind('.')) + ".conf"
-        : confOutputPath;
+// Legacy global sections (no per-game keys). Kept in sync with config/bases/default.conf.
+static std::string builtInBaseConf() {
+    return R"([sdl]
+fullscreen=true
+fullresolution=desktop
+output=openglnb
 
-    // Parse exe path (zip-internal; use '/' then convert for DOS cd line)
+[dosbox]
+machine=svga_s3
+
+[mixer]
+rate=44100
+blocksize=1024
+prebuffer=20
+
+[render]
+frameskip=0
+aspect=true
+
+)";
+}
+
+static std::vector<fs::path> profileSearchPathsOrdered(const std::string& name) {
+    std::vector<fs::path> c;
+    c.push_back(fs::path("config") / "bases" / (name + ".conf"));
+    if (const char* xdg = std::getenv("XDG_CONFIG_HOME"))
+        c.push_back(fs::path(xdg) / "autodos" / "bases" / (name + ".conf"));
+    if (const char* home = std::getenv("HOME"))
+        c.push_back(fs::path(home) / ".config" / "autodos" / "bases" / (name + ".conf"));
+    if (const char* ad = std::getenv("APPDATA"))
+        c.push_back(fs::path(ad) / "AutoDOS" / "bases" / (name + ".conf"));
+    return c;
+}
+
+std::vector<std::string> baseProfileCandidates(const std::string& profileName) {
+    std::vector<std::string> out;
+    for (const auto& p : profileSearchPathsOrdered(profileName))
+        out.push_back(p.generic_string());
+    return out;
+}
+
+static std::string firstExistingProfileFile(const std::string& name) {
+    for (const auto& p : profileSearchPathsOrdered(name)) {
+        std::error_code ec;
+        if (fs::is_regular_file(p, ec))
+            return p.string();
+    }
+    return {};
+}
+
+static bool readEntireFile(const std::string& path, std::string& out) {
+    std::ifstream f(path, std::ios::in | std::ios::binary);
+    if (!f.is_open())
+        return false;
+    std::ostringstream ss;
+    ss << f.rdbuf();
+    out = ss.str();
+    return true;
+}
+
+static bool loadBaseConfText(const std::string& explicitFile,
+                             const std::string& explicitProfile,
+                             std::string& outText,
+                             std::string& error) {
+    outText.clear();
+    error.clear();
+
+    if (!explicitFile.empty()) {
+        if (!readEntireFile(explicitFile, outText)) {
+            error = "cannot read base conf: " + explicitFile;
+            return false;
+        }
+        return true;
+    }
+
+    if (const char* envPath = std::getenv("AUTODOS_BASE_CONF")) {
+        if (envPath[0] != '\0' && readEntireFile(envPath, outText))
+            return true;
+    }
+
+    std::string prof = explicitProfile;
+    if (prof.empty()) {
+        if (const char* ep = std::getenv("AUTODOS_BASE_PROFILE"))
+            prof = ep;
+    }
+    if (prof.empty())
+        prof = "default";
+
+    std::string found = firstExistingProfileFile(prof);
+    if (!found.empty() && readEntireFile(found, outText))
+        return true;
+
+    outText = builtInBaseConf();
+    return true;
+}
+
+static std::string buildGameOverrideConf(const AnalyzeResult& result, const std::string& extractedDir) {
     std::string exeFull = result.exe;
     std::replace(exeFull.begin(), exeFull.end(), '\\', '/');
     size_t lastSlash = exeFull.rfind('/');
-    std::string exeName = (lastSlash != std::string::npos)
-        ? exeFull.substr(lastSlash + 1)
-        : exeFull;
-    std::string exeSubDir = (lastSlash != std::string::npos)
-        ? exeFull.substr(0, lastSlash)
-        : "";
+    std::string exeName = (lastSlash != std::string::npos) ? exeFull.substr(lastSlash + 1) : exeFull;
+    std::string exeSubDir = (lastSlash != std::string::npos) ? exeFull.substr(0, lastSlash) : "";
 
     std::string cdDir = result.workDir.empty() ? exeSubDir : result.workDir;
     std::string cdDos = toDosCdPath(cdDir);
@@ -523,44 +609,49 @@ bool writeDosboxConf(const std::string& zipPath,
     autoexec << exeName << "\r\n";
     autoexec << "exit\r\n";
 
-    // Build conf
-    std::ostringstream conf;
-    conf << "[sdl]\r\n";
-    conf << "fullscreen=true\r\n";
-    conf << "fullresolution=desktop\r\n";
-    conf << "output=openglnb\r\n";
-    conf << "\r\n";
-    conf << "[dosbox]\r\n";
-    conf << "machine=svga_s3\r\n";
-    conf << "memsize=" << memsize << "\r\n";
-    conf << "\r\n";
-    conf << "[cpu]\r\n";
-    conf << "core=dynamic\r\n";
-    conf << "cputype=pentium_slow\r\n";
-    conf << "cycles=" << cycles << "\r\n";
-    conf << "cycleup=500\r\n";
-    conf << "cycledown=20\r\n";
-    conf << "\r\n";
-    conf << "[dos]\r\n";
-    conf << "ems=" << (result.ems ? "true" : "false") << "\r\n";
-    conf << "xms=" << (result.xms ? "true" : "false") << "\r\n";
-    conf << "\r\n";
-    conf << "[mixer]\r\n";
-    conf << "rate=44100\r\n";
-    conf << "blocksize=1024\r\n";
-    conf << "prebuffer=20\r\n";
-    conf << "\r\n";
-    conf << "[render]\r\n";
-    conf << "frameskip=0\r\n";
-    conf << "aspect=true\r\n";
-    conf << "\r\n";
-    conf << "[autoexec]\r\n";
-    conf << autoexec.str();
-    conf << "\r\n";
+    std::ostringstream tail;
+    tail << "\r\n; --- AutoDOS per-game (append; overrides same keys in base) ---\r\n";
+    tail << "[dosbox]\r\n";
+    tail << "memsize=" << memsize << "\r\n\r\n";
+    tail << "[cpu]\r\n";
+    tail << "core=dynamic\r\n";
+    tail << "cputype=pentium_slow\r\n";
+    tail << "cycles=" << cycles << "\r\n";
+    tail << "cycleup=500\r\n";
+    tail << "cycledown=20\r\n\r\n";
+    tail << "[dos]\r\n";
+    tail << "ems=" << (result.ems ? "true" : "false") << "\r\n";
+    tail << "xms=" << (result.xms ? "true" : "false") << "\r\n\r\n";
+    tail << "[autoexec]\r\n";
+    tail << autoexec.str();
+    tail << "\r\n";
+    return tail.str();
+}
+
+bool writeDosboxConf(const std::string& zipPath,
+                     const std::string& extractedDir,
+                     const AnalyzeResult& result,
+                     const std::string& confOutputPath,
+                     const std::string& baseConfPath,
+                     const std::string& baseProfileName) {
+    std::string confPath = confOutputPath.empty()
+        ? zipPath.substr(0, zipPath.rfind('.')) + ".conf"
+        : confOutputPath;
+
+    std::string baseText;
+    std::string err;
+    if (!loadBaseConfText(baseConfPath, baseProfileName, baseText, err))
+        return false;
+
+    if (!baseText.empty() && baseText.back() != '\n' && baseText.back() != '\r')
+        baseText += "\r\n";
+
+    std::string full = std::move(baseText) + buildGameOverrideConf(result, extractedDir);
 
     std::ofstream f(confPath);
-    if (!f.is_open()) return false;
-    f << conf.str();
+    if (!f.is_open())
+        return false;
+    f << full;
     return true;
 }
 

@@ -21,12 +21,17 @@ static void printUsage() {
         << "  autodos-cli extract <zip> <outdir>\n"
         << "      Extract zip to outdir.\n\n"
         << "  autodos-cli prepare <zip> [--db PATH] [--dir OUTDIR] [--conf PATH]\n"
-        << "      Analyze, extract, write dosbox.conf (default: OUTDIR = ./<zip_stem>/,\n"
-        << "      conf next to zip unless --conf is set).\n\n"
+        << "              [--base PATH] [--profile NAME]\n"
+        << "      Analyze, extract, write dosbox.conf. Base profile = global DOSBox settings;\n"
+        << "      per-game cycles/mem/EMS/autoexec are appended (override same keys).\n\n"
+        << "  autodos-cli bases [NAME]\n"
+        << "      Show search paths for profile NAME (default: default).\n\n"
         << "  autodos-cli launch [--dosbox PATH] <conf>\n"
         << "      Start DOSBox with -conf (default PATH: dosbox, or AUTODOS_DOSBOX env).\n\n"
         << "Environment:\n"
-        << "  AUTODOS_DB       Default games.json path for --db when omitted\n";
+        << "  AUTODOS_DB             Default games.json for --db\n"
+        << "  AUTODOS_BASE_CONF      Full path to a base .conf (overrides profile search)\n"
+        << "  AUTODOS_BASE_PROFILE   Profile name (config/bases/<name>.conf)\n";
 }
 
 static std::string defaultDbPath() {
@@ -113,6 +118,8 @@ static int cmdPrepare(int argc, char** argv) {
     std::string zip;
     std::string outDir;
     std::string confOut;
+    std::string baseFile;
+    std::string baseProfile;
 
     for (int i = 0; i < argc; ++i) {
         if (std::strcmp(argv[i], "--db") == 0 && i + 1 < argc) {
@@ -125,6 +132,14 @@ static int cmdPrepare(int argc, char** argv) {
         }
         if (std::strcmp(argv[i], "--conf") == 0 && i + 1 < argc) {
             confOut = argv[++i];
+            continue;
+        }
+        if (std::strcmp(argv[i], "--base") == 0 && i + 1 < argc) {
+            baseFile = argv[++i];
+            continue;
+        }
+        if (std::strcmp(argv[i], "--profile") == 0 && i + 1 < argc) {
+            baseProfile = argv[++i];
             continue;
         }
         if (argv[i][0] == '-')
@@ -160,8 +175,11 @@ static int cmdPrepare(int argc, char** argv) {
     }
 
     const std::string confArg = confOut.empty() ? std::string() : confOut;
-    if (!AutoDOS::writeDosboxConf(zip, outDir, r, confArg)) {
-        std::cerr << "prepare: write dosbox.conf failed\n";
+    if (!AutoDOS::writeDosboxConf(zip, outDir, r, confArg, baseFile, baseProfile)) {
+        std::cerr << "prepare: write dosbox.conf failed";
+        if (!baseFile.empty())
+            std::cerr << " (check --base path)";
+        std::cerr << "\n";
         return 1;
     }
 
@@ -171,6 +189,26 @@ static int cmdPrepare(int argc, char** argv) {
     std::cout << "prepare: ok\n"
               << "  extracted: " << outDir << "\n"
               << "  conf: " << written << "\n";
+    if (!baseFile.empty())
+        std::cout << "  base file: " << baseFile << "\n";
+    else if (!baseProfile.empty())
+        std::cout << "  base profile: " << baseProfile << "\n";
+    return 0;
+}
+
+static int cmdBases(int argc, char** argv) {
+    std::string name = "default";
+    if (argc >= 1 && argv[0][0] != '-')
+        name = argv[0];
+
+    std::cout << "Profile \"" << name << "\" — tried in order:\n";
+    for (const auto& p : AutoDOS::baseProfileCandidates(name)) {
+        std::cout << "  " << p;
+        std::error_code ec;
+        if (fs::exists(p, ec))
+            std::cout << "  [exists]";
+        std::cout << "\n";
+    }
     return 0;
 }
 
@@ -227,6 +265,8 @@ int main(int argc, char** argv) {
         return cmdExtract(subArgc, subArgv);
     if (std::strcmp(cmd, "prepare") == 0)
         return cmdPrepare(subArgc, subArgv);
+    if (std::strcmp(cmd, "bases") == 0)
+        return cmdBases(subArgc, subArgv);
     if (std::strcmp(cmd, "launch") == 0)
         return cmdLaunch(subArgc, subArgv);
 
