@@ -47,12 +47,26 @@ AnalyzeResult analyze(const std::string& zipPath, const std::string& dbPath);
 // Extract zip to outDir
 bool extractZip(const std::string& zipPath, const std::string& outDir);
 
-// Write a dosbox.conf using the analyze result.
+// Write a dosbox.conf: optional base profile (video/audio/global) + appended per-game
+// overrides (memsize, cycles, EMS/XMS, autoexec). DOSBox Staging merges duplicate
+// sections; later keys override earlier ones.
+//
+// Resolution when baseConfPath and baseProfileName are both empty:
+//   1) AUTODOS_BASE_CONF — path to a .conf file
+//   2) Profile name from AUTODOS_BASE_PROFILE, else "default"
+//   3) Search config/bases/<name>.conf, then XDG_CONFIG_HOME ~/.config, APPDATA\AutoDOS
+//   4) Embedded fallback matching legacy AutoDOS globals
+//
 // If confOutputPath is empty, writes next to the zip: <zip_stem>.conf
 bool writeDosboxConf(const std::string& zipPath,
                      const std::string& extractedDir,
                      const AnalyzeResult& result,
-                     const std::string& confOutputPath = "");
+                     const std::string& confOutputPath = "",
+                     const std::string& baseConfPath = "",
+                     const std::string& baseProfileName = "");
+
+// Candidate paths for config/bases/<name>.conf (for diagnostics / CLI bases)
+std::vector<std::string> baseProfileCandidates(const std::string& profileName);
 
 // Fingerprint a filename for database lookup
 std::string fingerprint(const std::string& filename);
