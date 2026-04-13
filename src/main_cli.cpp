@@ -48,7 +48,8 @@ static std::string defaultLocalDbPath() {
 }
 
 static int cmdAnalyze(int argc, char** argv) {
-    std::string db = defaultDbPath();
+    std::string db    = defaultDbPath();
+    std::string local = defaultLocalDbPath();
     std::string zip;
 
     for (int i = 0; i < argc; ++i) {
@@ -56,9 +57,13 @@ static int cmdAnalyze(int argc, char** argv) {
             db = argv[++i];
             continue;
         }
+        if (std::strcmp(argv[i], "--local-db") == 0 && i + 1 < argc) {
+            local = argv[++i];
+            continue;
+        }
     }
     for (int i = 0; i < argc; ++i) {
-        if (std::strcmp(argv[i], "--db") == 0) {
+        if (std::strcmp(argv[i], "--db") == 0 || std::strcmp(argv[i], "--local-db") == 0) {
             ++i;
             continue;
         }
@@ -77,13 +82,15 @@ static int cmdAnalyze(int argc, char** argv) {
         return 2;
     }
 
-    AutoDOS::AnalyzeResult r = AutoDOS::analyze(zip, db);
+    AutoDOS::AnalyzeResult r = AutoDOS::analyze(zip, db, local);
     if (!r.success) {
         std::cerr << "analyze: failed: " << r.error << "\n";
         return 1;
     }
 
     std::cout << "success: yes\n"
+              << "db_merge: primary + "
+              << (local.empty() ? "no overlay\n" : local + "\n")
               << "title: " << r.title << "\n"
               << "exe: " << r.exe << "\n"
               << "work_dir: " << r.workDir << "\n"
@@ -126,10 +133,15 @@ static int cmdPrepare(int argc, char** argv) {
     std::string confOut;
     std::string baseFile;
     std::string baseProfile;
+    std::string local = defaultLocalDbPath();
 
     for (int i = 0; i < argc; ++i) {
         if (std::strcmp(argv[i], "--db") == 0 && i + 1 < argc) {
             db = argv[++i];
+            continue;
+        }
+        if (std::strcmp(argv[i], "--local-db") == 0 && i + 1 < argc) {
+            local = argv[++i];
             continue;
         }
         if (std::strcmp(argv[i], "--dir") == 0 && i + 1 < argc) {
@@ -167,7 +179,7 @@ static int cmdPrepare(int argc, char** argv) {
     if (outDir.empty())
         outDir = fs::path(zip).stem().string();
 
-    AutoDOS::AnalyzeResult r = AutoDOS::analyze(zip, db);
+    AutoDOS::AnalyzeResult r = AutoDOS::analyze(zip, db, local);
     if (!r.success) {
         std::cerr << "prepare: analyze failed: " << r.error << "\n";
         return 1;
@@ -189,6 +201,14 @@ static int cmdPrepare(int argc, char** argv) {
         return 1;
     }
 
+    if (r.source == "scored") {
+        AutoDOS::AnalyzeResult ar = r;
+        if (ar.title.empty())
+            ar.title = fs::path(zip).stem().string();
+        std::string syncTarget = local.empty() ? db : local;
+        AutoDOS::addToDatabase(syncTarget, ar);
+    }
+
     std::string written = confOut.empty()
         ? zip.substr(0, zip.rfind('.')) + ".conf"
         : confOut;
@@ -199,6 +219,8 @@ static int cmdPrepare(int argc, char** argv) {
         std::cout << "  base file: " << baseFile << "\n";
     else if (!baseProfile.empty())
         std::cout << "  base profile: " << baseProfile << "\n";
+    if (!local.empty())
+        std::cout << "  local db overlay: " << local << "\n";
     return 0;
 }
 
