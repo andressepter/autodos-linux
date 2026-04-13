@@ -26,6 +26,8 @@ static void printUsage() {
         << "      per-game cycles/mem/EMS/autoexec are appended (override same keys).\n\n"
         << "  autodos-cli bases [NAME]\n"
         << "      Show search paths for profile NAME (default: default).\n\n"
+        << "  autodos-cli export-pr [--local-db PATH] [--out PATH]\n"
+        << "      games.pr-fragment.json for upstream PR (run from repo root).\n\n"
         << "  autodos-cli launch [--dosbox PATH] <conf>\n"
         << "      Start DOSBox with -conf (default PATH: dosbox, or AUTODOS_DOSBOX env).\n\n"
         << "Environment:\n"
@@ -224,6 +226,33 @@ static int cmdPrepare(int argc, char** argv) {
     return 0;
 }
 
+static int cmdExportPr(int argc, char** argv) {
+    std::string local = defaultLocalDbPath();
+    std::string out   = "games.pr-fragment.json";
+    for (int i = 0; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--local-db") == 0 && i + 1 < argc) {
+            local = argv[++i];
+            continue;
+        }
+        if (std::strcmp(argv[i], "--out") == 0 && i + 1 < argc) {
+            out = argv[++i];
+            continue;
+        }
+    }
+    if (local.empty() || !fs::is_regular_file(local)) {
+        std::cerr << "export-pr: need existing --local-db or AUTODOS_DB_LOCAL\n";
+        return 2;
+    }
+    fs::path py = fs::current_path() / "scripts/export_pr_games_fragment.py";
+    if (!fs::is_regular_file(py)) {
+        std::cerr << "export-pr: run from repo root (scripts/export_pr_games_fragment.py missing)\n";
+        return 2;
+    }
+    std::ostringstream cmd;
+    cmd << "python3 \"" << py.string() << "\" --local \"" << local << "\" --out \"" << out << "\"";
+    return std::system(cmd.str().c_str()) == 0 ? 0 : 1;
+}
+
 static int cmdBases(int argc, char** argv) {
     std::string name = "default";
     if (argc >= 1 && argv[0][0] != '-')
@@ -295,6 +324,8 @@ int main(int argc, char** argv) {
         return cmdPrepare(subArgc, subArgv);
     if (std::strcmp(cmd, "bases") == 0)
         return cmdBases(subArgc, subArgv);
+    if (std::strcmp(cmd, "export-pr") == 0)
+        return cmdExportPr(subArgc, subArgv);
     if (std::strcmp(cmd, "launch") == 0)
         return cmdLaunch(subArgc, subArgv);
 
